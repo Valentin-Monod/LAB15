@@ -1,3 +1,5 @@
+
+
 object Task2 extends App {
 
   var names = List("Adam", "Paul", "Manou", "Gonçalo")

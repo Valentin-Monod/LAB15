@@ -4,12 +4,16 @@ class Node (var item : String, var next : Node) {
 }
 
 class LinkedList () {
+
   var head : Node = null
+
+  def clear() : Unit = head = null
 
   def addToStart(element : String) : Unit = head = new Node(element, head)
 
   def addToEnd(element:String) : Unit = {
-    getLastElement().next = new Node(element, null)
+    if (head == null) head = new Node(element, head)
+    else getLastElement().next = new Node(element, null)
   }
 
   def getSize() : Int = {
@@ -66,11 +70,19 @@ class LinkedList () {
     first_occurence
   }
 
+  def change_item(position : Int, item : String) : Unit = {
+    var temp = head
+    for (i <- 0 until getSize()) {
+      if (i == position) temp.item = item
+      temp = temp.next
+    }
+  }
+
   def swapElements(element1: String, element2: String) : Unit = {
-    require(isPresent(element1))
-    require(isPresent(element2))
-    findElement(element1).item = element2
-    findElement(element2).item = element1
+    var pos1 = getPosition(element1)
+    var pos2 = getPosition(element2)
+    change_item(pos1, element2)
+    change_item(pos2, element1)
   }
 
   def getPosition(element: String): Int = {
@@ -83,11 +95,12 @@ class LinkedList () {
     result
   }
 
-  def removeFirstElement() : Unit = head = head.next
+  def removeFirstElement() : Unit = {
+    if (head != null) head = head.next
+  }
 
   def removeLastElement() : Unit = {
-    require(getSize() != 0)
-    if (getSize() == 1) head = null
+    if (getSize() <= 1) head = null
     else {
       var temp = head
       var removed = false
@@ -99,13 +112,11 @@ class LinkedList () {
         temp = temp.next
       }
     }
-
   }
 
   def removeElement(element : String) : Unit = {
-    require(isPresent(element))
-
-    if (getPosition(element) == getSize()-1) removeLastElement()
+    if (getSize() <= 1) clear()
+    else if (getPosition(element) == getSize()-1) removeLastElement()
     else if (getPosition(element) == 0) removeFirstElement()
     else {
       var current = head
@@ -119,11 +130,7 @@ class LinkedList () {
 
   }
 
-  def clear() : Unit = head = null
-
   def insertAfter(before: String, elementToInsert: String): Unit = {
-    require(isPresent(before))
-
     if (getPosition(before) == getSize()-1) addToEnd(elementToInsert)
     else if (getPosition(before) == 0) {
       var temp = head
@@ -157,10 +164,11 @@ class LinkedList () {
     }
     result
   }
+
 }
 
 object LinkedListPart extends App{
 
-  var flightList: LinkedList = new LinkedList()
+
 
 }
